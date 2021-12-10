@@ -49,9 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         	.userInfoEndpoint().userService(oauthUserService)
         	.and()
         	.successHandler(authSuccessHandler)
-        .and()
+        	.and()
 		.logout()
-			.permitAll();
+			.logoutSuccessUrl("/")
+			.invalidateHttpSession(true)
+			.deleteCookies("JSESSIONID");
 			
 		
 		
