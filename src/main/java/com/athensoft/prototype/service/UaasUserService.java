@@ -16,28 +16,14 @@ public class UaasUserService {
 	@Autowired
 	private UaasUserRepository userRepo;
 	
-	public void processOAuthPostLogin(String username) {
-		System.out.println("UaasUserService :" + username);
-        UaasUser existUser = userRepo.findByAcctName(username);
-         
-        if (existUser == null) {
-        	UaasUser newUser = new UaasUser();
-            newUser.setAcctName(username);
-            newUser.setProvider(Provider.GOOGLE);
-            newUser.setEnabled(true);          
-             
-            userRepo.save(newUser);        
-        }
-         
-    }
 
-	public UaasUser getUserByAcctName(String email) {
-		return userRepo.findByAcctName(email);
+	public UaasUser getUserByAcctName(String acctName) {
+		return userRepo.findByAcctName(acctName);
 	}
 
-	public void createUser(String email, Provider provider) {
+	public void createUser(String acctName, Provider provider) {
 		UaasUser user = new UaasUser();
-		user.setAcctName(email);
+		user.setAcctName(acctName);
 		user.setProvider(provider);
 		user.setEnabled(true);
 		List<UaasAuthority> authorities = new ArrayList<>();

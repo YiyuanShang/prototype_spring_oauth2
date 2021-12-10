@@ -17,7 +17,7 @@ import com.athensoft.prototype.entity.UaasUser;
 import com.athensoft.prototype.service.UaasUserService;
 
 @Component
-public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
+public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 	@Autowired
 	UaasUserService userService;
 	

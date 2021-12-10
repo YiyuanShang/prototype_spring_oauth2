@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomOAuth2UserService oauthUserService;
 	
 	@Autowired
-	private OAuth2LoginSuccessHandler authSuccessHandler;
+	private CustomOAuth2LoginSuccessHandler authSuccessHandler;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
