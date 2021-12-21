@@ -1,5 +1,5 @@
 package com.athensoft.prototype.entity;
 
-public enum Provider {
+public enum AuthProvider {
 	LOCAL, GOOGLE;
 }
