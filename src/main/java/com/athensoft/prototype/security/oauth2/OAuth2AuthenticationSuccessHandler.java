@@ -6,9 +6,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.athensoft.prototype.config.AppProperties;
+
 import com.athensoft.prototype.exception.BadRequestException;
-import com.athensoft.prototype.security.TokenProvider;
+
 
 
 import javax.servlet.ServletException;
@@ -24,23 +24,13 @@ import java.util.Optional;
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private TokenProvider tokenProvider;
-
-    private AppProperties appProperties;
-
-   
-
-
-    @Autowired
-    OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties) {
-        this.tokenProvider = tokenProvider;
-        this.appProperties = appProperties;
-      
-    }
+ 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-    	super.onAuthenticationSuccess(request, response, authentication);
+    	
+    	System.out.println("OAuth2AuthenticationSuccessHandler onAuthenticationSuccess");
+    
     	String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {
