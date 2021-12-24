@@ -23,7 +23,6 @@ import com.athensoft.prototype.entity.UaasUser;
 import com.athensoft.prototype.exception.BadRequestException;
 import com.athensoft.prototype.payload.ApiResponse;
 import com.athensoft.prototype.payload.AuthResponse;
-import com.athensoft.prototype.payload.LoginRequest;
 import com.athensoft.prototype.payload.SignUpRequest;
 import com.athensoft.prototype.security.TokenProvider;
 
@@ -43,21 +42,7 @@ public class AuthController {
     @Autowired
     private TokenProvider tokenProvider;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
-    }
+    
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -70,7 +55,7 @@ public class AuthController {
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
-        user.setProvider(AuthProvider.LOCAL);
+        user.setProvider(AuthProvider.local);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

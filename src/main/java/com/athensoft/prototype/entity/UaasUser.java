@@ -37,7 +37,7 @@ public class UaasUser {
 
     private String imageUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="email_verified")
     private Boolean emailVerified = false;
 
     @JsonIgnore

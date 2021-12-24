@@ -20,10 +20,8 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.athensoft.prototype.security.CustomUserDetailsService;
-import com.athensoft.prototype.security.RestAuthenticationEntryPoint;
 import com.athensoft.prototype.security.TokenAuthenticationFilter;
 import com.athensoft.prototype.security.oauth2.CustomOAuth2UserService;
-import com.athensoft.prototype.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.athensoft.prototype.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.athensoft.prototype.security.oauth2.OAuth2AuthenticationSuccessHandler;
 
@@ -48,23 +46,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-
+   
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter();
     }
 
-    /*
-      By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
-      the authorization request. But, since our service is stateless, we can't save it in
-      the session. We'll save the request in a Base64 encoded cookie instead.
-    */
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
+   
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -101,22 +89,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	    			.and()
                 .httpBasic()
                     .disable()
-                .exceptionHandling()
-                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                    .and()
                 .authorizeRequests()
-                    .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                        .permitAll()
-                    .antMatchers("/home", "/auth/**", "/oauth2/**")
+                    .antMatchers("/hello").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/", "/home", "/auth/**", "/oauth2/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
@@ -125,10 +100,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 	.loginPage("/login")
                     .authorizationEndpoint()
                         .baseUri("/oauth2/authorize")
-                        .authorizationRequestRepository(cookieAuthorizationRequestRepository())
-                        .and()
-                    .redirectionEndpoint()
-                        .baseUri("/oauth2/callback/*")
                         .and()
                     .userInfoEndpoint()
                         .userService(customOAuth2UserService)
