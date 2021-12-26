@@ -79,19 +79,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                     .and()
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                .csrf()
-                    .disable()
                 .formLogin()
 	                .loginPage("/login")
 	    			.permitAll()
 	    			.and()
-                .httpBasic()
-                    .disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/home", "/auth/**", "/oauth2/**")
+                    .antMatchers("/", "/home", "/oauth2/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
@@ -105,7 +98,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .userService(customOAuth2UserService)
                         .and()
                     .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(oAuth2AuthenticationFailureHandler);
+                    .failureHandler(oAuth2AuthenticationFailureHandler)
+                    .and()
+        		.logout()
+        			.logoutSuccessUrl("/")
+        			.invalidateHttpSession(true)
+        			.deleteCookies("JSESSIONID");
 
     }
 }
